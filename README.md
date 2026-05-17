@@ -57,7 +57,7 @@ The following examples compare Mega-ASR with several representative ASR systems 
 
 | Model | WER | Transcript |
 |---|---:|---|
-| **Ground Truth** | Reference | "...and said to him let us go and eat some honey. Whose honey? inquired Kobay cautiously. My father's, Soongoora replied. Oh, all right, I'm with you, said the tortoise eagerly, and away they went." |
+| Ground Truth | Reference | "...and said to him let us go and eat some honey. Whose honey? inquired Kobay cautiously. My father's, Soongoora replied. Oh, all right, I'm with you, said the tortoise eagerly, and away they went." |
 | **Mega-ASR (Ours)** | ✅ <mark><b>47.1</b></mark> | <b>"He said to him let's go and eat some honey. It's honey? he inquired very cautiously. My father is Superabundant — oh, all right, I will, he said to her eagerly, and away they went."</b> |
 | Qwen3-ASR | 🔴 **100.0** | <i>&lt;empty&gt;</i> |
 | Gemini-3-Pro | 🔴 **86.1** | "But tell me, that's how she met my father's sister. Oh, alright. I wish... I really..." |
@@ -77,7 +77,7 @@ The following examples compare Mega-ASR with several representative ASR systems 
 
 | Model | WER | Transcript |
 |---|---:|---|
-| **Ground Truth** | Reference | "To waste, I skip forty years, said the baker in tears, and proceed without further remark to the day when you took me aboard your ship to help you in hunting the snark." |
+| Ground Truth | Reference | "To waste, I skip forty years, said the baker in tears, and proceed without further remark to the day when you took me aboard your ship to help you in hunting the snark." |
 | **Mega-ASR (Ours)** | ✅ <mark><b>5.9</b></mark> | <b>"To witness, I skip forty years, said the baker in tears, and proceed without further remark to the day when you took me aboard of your ship to help you in hunting the snark."</b> |
 | Qwen3-ASR | 🟠 **64.7** | "I skipped 40 years. Second day in here. Ever since you left, I've been a monk..." |
 | Gemini-3-Pro | 🟠 **64.7** | "I spent forty years at sea and never seen a rougher than the day that you took me aboard your ship..." |
@@ -97,7 +97,7 @@ The following examples compare Mega-ASR with several representative ASR systems 
 
 | Model | WER | Transcript |
 |---|---:|---|
-| **Ground Truth** | Reference | "The friendly gang left the drug store." |
+| Ground Truth | Reference | "The friendly gang left the drug store." |
 | **Mega-ASR (Ours)** | ✅ <mark><b>8.0</b></mark> | <b>"The friendly gang left the drug store."</b> |
 | Qwen3-ASR | 🟠 **57.1** | "It's a friendly gang. That's the drug gang." |
 | Gemini-3-Pro | 🟡 **42.9** | "Friendly gang left the drugs." |
@@ -117,7 +117,7 @@ The following examples compare Mega-ASR with several representative ASR systems 
 
 | Model | WER | Transcript |
 |---|---:|---|
-| **Ground Truth** | Reference | "The set of china hit the floor with a crash." |
+| Ground Truth | Reference | "The set of china hit the floor with a crash." |
 | **Mega-ASR (Ours)** | ✅ <mark><b>8.0</b></mark> | <b>"The set of china hit the floor with a crash."</b> |
 | Qwen3-ASR | 🟡 **40.0** | "The bed is fine. It hit the floor with a crash." |
 | Gemini-3-Pro | 🔴 **100.0** | "He said it's fine I hit the forward slash." |
@@ -137,7 +137,7 @@ The following examples compare Mega-ASR with several representative ASR systems 
 
 | Model | WER | Transcript |
 |---|---:|---|
-| **Ground Truth** | Reference | "Among export-led electrical and computer makers, Japan Victor Company fell fifty to two thousand three hundred twenty." |
+| Ground Truth | Reference | "Among export-led electrical and computer makers, Japan Victor Company fell fifty to two thousand three hundred twenty." |
 | **Mega-ASR (Ours)** | ✅ <mark><b>11.1</b></mark> | <b>"Among export-led computer makers, Japan Victor Company fell fifty to two thousand three hundred twenty."</b> |
 | Qwen3-ASR | 🟡 **38.9** | "Among export-led computer makers, Japan VictorNet sold fifty-two thousand three hundred fifty." |
 | Gemini-3-Pro | 🟡 **35.7** | "Among export-led computer makers, Japan Victor Co. fell 50 to 2,350 yen." |
@@ -157,7 +157,7 @@ The following examples compare Mega-ASR with several representative ASR systems 
 
 | Model | WER | Transcript |
 |---|---:|---|
-| **Ground Truth** | Reference | "Has exposure really been reduced?" |
+| Ground Truth | Reference | "Has exposure really been reduced?" |
 | **Mega-ASR (Ours)** | ✅ <mark><b>8.0</b></mark> | <b>"Has exposure really been reduced."</b> |
 | Qwen3-ASR | 🟡 **40.0** | "Has exposure really done you?" |
 | Gemini-3-Pro | 🔴 **80.0** | "Has the closure really affected you?" |
