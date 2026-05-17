@@ -11,9 +11,8 @@
 <p align="center">
   <a href="https://xzf-thu.github.io/Mega-ASR/"><b>Homepage</b></a> |
   <a href="#model-download"><b>Model Download</b></a> |
-  <a href="#installation"><b>Installation</b></a> |
-  <a href="#inference"><b>Inference</b></a> |
-  <a href="#evaluation"><b>Evaluation</b></a>
+  <a href="#installation"><b>Our Bench Download</b></a> |
+  <a href="#paper"><b>Paper</b></a> |
 </p>
 
 <p align="center">
