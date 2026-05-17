@@ -25,7 +25,6 @@
   <img src="https://img.shields.io/badge/License-Apache--2.0-green">
 </p>
 
-## Introduction
 
 ## Introduction
 
@@ -42,7 +41,6 @@ This repository is currently under active development.
 - **May 20, 2025**: 🔥 We release **Voices-in-the-Wild-2M**, a benchmark for in-the-wild ASR robustness evaluation. [[Dataset]](https://huggingface.co/datasets/zhifeixie/Voices-in-the-Wild-test-v2)
 - **Coming soon**: 🔥 We will release the **DAPO-LoRA training code**.
 
-## Highlights
 
 
 
@@ -92,13 +90,50 @@ Mega-ASR/
          └─ DAPO-LoRA training module, to be released in a future update.
 ```
 
-## Installation
+## Quick Start
+
+### 1. Create Environment
+
+We recommend using Conda to create an isolated Python environment.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Mega-ASR.git
-cd Mega-ASR
-pip install -r requirements.txt
+conda create -n mega-asr2 python=3.12 -y
+conda activate mega-asr2
 ```
+
+Upgrade basic Python build tools:
+
+```bash
+python -m pip install --upgrade pip setuptools wheel
+```
+
+### 2. Install PyTorch
+
+Install PyTorch with CUDA 12.8 support:
+
+```bash
+pip install \
+  torch==2.9.1+cu128 \
+  torchaudio==2.9.1+cu128 \
+  torchvision==0.24.1+cu128 \
+  --index-url https://download.pytorch.org/whl/cu128
+```
+
+### 3. Install Mega-ASR Dependencies
+
+```bash
+pip install -r mega_asr_requirements.txt
+```
+
+### 4. Install Qwen3-ASR Dependency
+
+Mega-ASR is built upon Qwen3-ASR. Please prepare the Qwen3-ASR source code locally and install it in editable mode:
+
+```bash
+pip install -e /path/to/Qwen3-ASR --no-deps
+```
+
+For example, replace `/path/to/Qwen3-ASR` with the actual local path of your Qwen3-ASR repository.
 
 ## Inference
 
