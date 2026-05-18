@@ -24,7 +24,7 @@ export WANDB_MODE=online
 # RUN_NAME=
 
 torchrun --nproc_per_node=2 --master_port=29520 train.py \
-  --model_path /data/haobin/pky_train/qwen3/Qwen3-ASR-1.7B \
+  --model_path <The previous merge model> \
   --train_file ${TRAIN_JSONL} \
   --eval_file ${VAL_JSONL} \
   --output_dir ${OUT_DIR} \
@@ -47,7 +47,7 @@ torchrun --nproc_per_node=2 --master_port=29520 train.py \
   --weight_decay 0.01 \
   --run_name ${RUN_NAME} \
   --use_fixed_ratio_sampler 0 \
-  --merge_lora_into_base_from /data/haobin/pky_train/qwen3/out_qwen3-asr-lora-0317_550000_wer3_towerb4+proj_2gpu_bs128/checkpoint-1000 \
+  --merge_lora_into_base_from <The previous training checkpoint> \
   --save_adapter_only 1 2>&1 | tee -a ${LOG_FILE}
 
     # --mix_target_ratio 0.2 \

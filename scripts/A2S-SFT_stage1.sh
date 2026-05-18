@@ -24,7 +24,7 @@ export WANDB_MODE=online
 # RUN_NAME=
 
 torchrun --nproc_per_node=2 train.py \
-  --model_path /data/haobin/pky_train/qwen3/Qwen3-ASR-1.7B \
+  --model_path Qwen3-ASR-1.7B \
   --train_file ${TRAIN_JSONL} \
   --eval_file ${VAL_JSONL} \
   --output_dir ${OUT_DIR} \

@@ -1,9 +1,11 @@
 python web_ui/gradio_MegaASR_for_all.py \
-  --model_path Qwen3-ASR/Qwen3-ASR-1.7B \
-  --lora_b_dir A2S-SFT-LORA/lora1 \
-  --lora_c_dir A2S-SFT-LORA/lora2 \
-  --lora_d_dir A2S-SFT-LORA/lora3 \
-  
+  --model_path Qwen3-ASR-1.7B \
+  --lora_b_dir A2S-SFT-lora/lora1 \
+  --lora_c_dir A2S-SFT-lora/lora2 \
+  --lora_d_dir A2S-SFT-lora/lora3 \
+  --quality_checkpoint router/runs/exp_20260211_1layer/best_acc_model.pt \
+  --quality_model_dir router \
+  --quality_threshold 0.5 \
   --device_map cuda:0   \
   --quality_device cuda  \
   --server_name 0.0.0.0   \
