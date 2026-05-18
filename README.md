@@ -403,8 +403,6 @@ Each line in the input file should be a JSON object. An example is shown below:
   "audio_path": "examples/noise.wav",
   "question": "Please transcribe the audio content into text.",
   "answer": "I usually take the quieter road home because the main street gets crowded after work.",
-  "subset": "sim-en-noise",
-  "name": "vitw_01756_random_synthetic_en_noise"
 }
 ```
 
@@ -415,7 +413,7 @@ Required fields are:
 | `audio_path` | Path to the input audio file. |
 | `answer` | Ground-truth transcription. |
 
-Optional fields such as `index`, `question`, `subset`, and `name` will be kept unchanged in the output JSONL.
+Optional fields such as `index`will be kept unchanged in the output JSONL.
 
 If the audio path is relative, it should be relative to the current working directory or to the JSONL file location, depending on how the script is executed.
 
@@ -431,8 +429,6 @@ Example output:
   "audio_path": "examples/noise.wav",
   "question": "Please transcribe the audio content into text.",
   "answer": "I usually take the quieter road home because the main street gets crowded after work.",
-  "subset": "sim-en-noise",
-  "name": "vitw_01756_random_synthetic_en_noise",
   "prediction": "I usually take the quieter road home because the main street gets crowded after work.",
   "pred_language": "English",
   "wer": 0.0,
