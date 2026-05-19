@@ -13,23 +13,22 @@ _CKPT_RE = re.compile(r"^checkpoint-(\d+)$")
 def find_latest_checkpoint(output_dir: str) -> Optional[str]:
     if not output_dir or not os.path.isdir(output_dir):
         return None
-    best_step = None
-    best_path = None
+
+    best_step, best_path = -1, None
     for name in os.listdir(output_dir):
-        m = _CKPT_RE.match(name)
-        if not m:
+        match = _CKPT_RE.match(name)
+        if not match:
             continue
-        step = int(m.group(1))
         path = os.path.join(output_dir, name)
-        if os.path.isdir(path) and (best_step is None or step > best_step):
-            best_step = step
-            best_path = path
+        step = int(match.group(1))
+        if os.path.isdir(path) and step > best_step:
+            best_step, best_path = step, path
     return best_path
 
 
-def copy_required_hf_files_for_qwen_asr(src_dir: str, dst_dir: str):
+def copy_hf_files(src_dir: str, dst_dir: str):
     os.makedirs(dst_dir, exist_ok=True)
-    required = [
+    for name in [
         "config.json",
         "generation_config.json",
         "preprocessor_config.json",
@@ -40,14 +39,15 @@ def copy_required_hf_files_for_qwen_asr(src_dir: str, dst_dir: str):
         "chat_template.json",
         "merges.txt",
         "vocab.json",
-    ]
-    for fn in required:
-        src = os.path.join(src_dir, fn)
+    ]:
+        src = os.path.join(src_dir, name)
         if os.path.exists(src):
-            shutil.copy2(src, os.path.join(dst_dir, fn))
+            shutil.copy2(src, os.path.join(dst_dir, name))
 
 
-class MakeEveryCheckpointInferableCallback(TrainerCallback):
+class MakeCheckpointInferableCallback(TrainerCallback):
+    """Copy tokenizer/config files into every adapter checkpoint."""
+
     def __init__(self, base_model_path: str):
         self.base_model_path = base_model_path
 
@@ -59,5 +59,5 @@ class MakeEveryCheckpointInferableCallback(TrainerCallback):
         if not os.path.isdir(ckpt_dir):
             ckpt_dir = kwargs.get("checkpoint", ckpt_dir)
 
-        copy_required_hf_files_for_qwen_asr(self.base_model_path, ckpt_dir)
+        copy_hf_files(self.base_model_path, ckpt_dir)
         return control

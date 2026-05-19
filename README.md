@@ -5,37 +5,34 @@
 
 <h1 align="center">Mega-ASR: Towards In-the-Wild^2 Speech Recognition via Scaling Up Real-world Acoustic Simulation</h1>
 
-We introduce **MEGA-ASR**, the first foundation ASR model to target **full-scenario robust speech recognition in the wild** through systematic training on **7 atomic acoustic conditions** and **54 compound acoustic scenarios**. Built on **2.6M training samples** covering **noise, far-field speech, obstruction, echo and reverberation, recording artifacts, electronic distortion, and transmission dropout**, MEGA-ASR uses **three-stage SFT** and **DG-WGPO based RL** to achieve **up to nearly 30% gains** over leading open and closed source SOTA models in challenging acoustic environments.
+We introduce **MEGA-ASR**, the first foundation ASR model to target **full-scenario robust speech recognition in the wild** through systematic training on **7 atomic acoustic conditions** and **54 compound acoustic scenarios**. Built on **2.6M training samples** covering **noise, far-field speech, obstruction, echo and reverberation, recording artifacts, electronic distortion, and transmission dropout**, MEGA-ASR uses **A2S-SFT** and **DG-WGPO based RL** to achieve **up to nearly 30% gains** over leading open and closed source SOTA models in challenging acoustic environments.
 
 <p align="center"><u><em>You’ll come back to Mega-ASR — after finding the rest fail in the real world.</em></u></p>
-<p align="center">
-  <!-- First line -->
-  <a href="https://arxiv.org/abs/2604.08000">
-    <img src="https://img.shields.io/badge/arXiv-2604.08000-b31b1b?logo=arxiv&logoColor=white">
-  </a>
-  <a href="https://github.com/xzf-thu/Voices-in-the-wild-2M">
-    <img src="https://img.shields.io/badge/Voices--in--the--wild--2M-GitHub-black?logo=github&logoColor=white">
-  </a>
-  <a href="https://huggingface.co/">
-    <img src="https://img.shields.io/badge/HuggingFace-🤗-yellow">
-  </a>
-  <a href="https://github.com/xzf-thu/Mega-ASR">
-    <img src="https://img.shields.io/badge/Benchmark-GitHub-black?logo=github&logoColor=white">
-  </a>
-</p>
+
 
 <p align="center">
-  <!-- Second line -->
+  <a href="https://arxiv.org/abs/2604.08000">Technical Report 📖</a>
+  /
+  <a href="YOUR_VOICES_IN_THE_WILD_2M_LINK">Voices-in-the-wild-2M 🤗</a>
+  /
+  <a href="YOUR_MEGA_ASR_WEIGHTS_LINK">Mega-ASR Weights 🤗</a>
+  /
+  <a href="YOUR_VOICES_IN_THE_WILD_BENCH_LINK">Voices-in-the-Wild-Bench 🏆</a>
+</p>
+<p align="center">
   <a href="YOUR_WECHAT_LINK_OR_QR_CODE">
     <img src="https://img.shields.io/badge/WeChat-Join%20Group-07C160?logo=wechat&logoColor=white">
   </a>
-  <a href="https://xzf-thu.github.io/Mega-ASR/">
-    <img src="https://img.shields.io/badge/Project-Page-blue?logo=googlechrome&logoColor=white">
+  <a href="YOUR_PROJECT_PAGE_LINK">
+    <img src="https://img.shields.io/badge/Project-Page-blue">
   </a>
   <a href="https://x.com/XieZhifei14110">
     <img src="https://img.shields.io/badge/X-@XieZhifei14110-black?logo=x&logoColor=white">
   </a>
 </p>
+
+
+
 
 <p align="center">
   <img src="/docs/assets/dataset.png" alt="Mega-ASR Logo" width="100%">
@@ -65,7 +62,7 @@ We introduce **MEGA-ASR**, the first foundation ASR model to target **full-scena
 
 
 
-### 🔥News
+## 🔥News
 
 - **May 21, 2025**: 🔥 We release **Voices-in-the-Wild-Bench**, a benchmark for in-the-wild ASR robustness evaluation.
 - **May 20, 2025**: 🔥 We release **Voices-in-the-Wild-2M**.
@@ -73,7 +70,7 @@ We introduce **MEGA-ASR**, the first foundation ASR model to target **full-scena
 - **May 19, 2025**: 🔥 **Mega-ASR** model weights are now available on Hugging Face.
 - **May 19, 2025**: 🔥 We release the **Mega-ASR Technical Report**.
 
-### Overview
+## Overview
 
 * **[Quick Start](#quick-start)**
 * **[Introduction](#inference)**
@@ -83,7 +80,7 @@ We introduce **MEGA-ASR**, the first foundation ASR model to target **full-scena
 * **[Citation and licence](#citation)**
 
 
-### Quick Start
+## Quick Start
 
 **Installation**
 ```bash
@@ -111,20 +108,25 @@ git clone https://github.com/QwenLM/Qwen3-ASR.git
 ```
 
 
-### Introduction
+## Introduction
 
 **MEGA-ASR** is purpose-built for **full-scenario robust ASR in the wild**, especially excelling at **semantic recovery** and **local keyword reconstruction** under severe acoustic degradation. It substantially reduces common failure modes such as **hallucinations**, **empty outputs**, and **dropped utterances**, making speech recognition reliable in truly challenging real-world environments.
-#### Features 
-✅ **One model for the messy real world**: Covers **7 atomic acoustic conditions** and **54 compound acoustic scenarios** in a single model.
-✅ **Stronger recovery under severe distortion**: Excels at **semantic recovery** and **local keyword reconstruction**, greatly reducing **hallucinations**, **empty outputs**, and **dropped utterances**.
-✅ **SOTA robust ASR performance**: Achieves up to nearly **30% gains** over leading open and closed source SOTA models in challenging acoustic environments.
 <p align="center">
   <img src="assets/figures/radar_results.png" alt="Results" width="100%">
 </p>
 
+#### Features 
+✅ **One model for the messy real world**: Covers **7 atomic acoustic conditions** and **54 compound acoustic scenarios** in a single model.
+
+✅ **Stronger recovery under severe distortion**: Excels at **semantic recovery** and **local keyword reconstruction**, greatly reducing **hallucinations**, **empty outputs**, and **dropped utterances**.
+
+✅ **SOTA robust ASR performance**: Achieves up to nearly **30% gains** over leading open and closed source SOTA models in challenging acoustic environments.
 
 
-### Finetuning
+
+
+
+## Finetuning
 
 Mega-ASR supports robustness adaptation through supervised fine-tuning (A2S-SFT) and reinforcement learning (DG-WGPO).
 
@@ -145,7 +147,7 @@ Training data is in JSONL format:
 
 The DG-WGPO reinforcement learning module will be released in a future update.
 
-### Evaluation
+## Evaluation
 
 <p align="center">
   <img src="/docs/assets/training.png" alt="Mega-ASR Training" width="100%">
@@ -173,13 +175,19 @@ Each input line requires `audio_path` and `answer` (ground-truth transcription).
   <img src="/assets/tables/noisy_robust_asr_benchmarks.png" alt="Mega-ASR Results" width="100%">
 </p>
 
+<p align="center">
+  <img src="/assets/tables/voices_in_the_wild_breakdown.png" alt="Mega-ASR Results" width="100%">
+</p>
 
 
-### License
+## Acknowledgements
+
+
+## License
 This project will be released under the Apache-2.0 License.
 
 
-### Citation
+## Citation and stars
 ```bash
 @article{xie2024mini,
   title={Mini-omni: Language models can hear, talk while thinking in streaming},
@@ -188,8 +196,6 @@ This project will be released under the Apache-2.0 License.
   year={2024}
 }
 ```
-
-## Star History
 
 <a href="https://www.star-history.com/?repos=mega-asr%2Fmega-asr&type=date&legend=top-left">
  <picture>
