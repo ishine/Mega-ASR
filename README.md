@@ -34,18 +34,6 @@ This repository contains the official implementation, model weights, core traini
 </p>
 
 
-
-
-## 👀 What You Must See
-
-The following examples compare Mega-ASR with several representative ASR systems under challenging dirty speech conditions. Click **Listen** to play each audio sample.
-
----
-
-<details open>
-<summary><b>▶️ Empty Output Recovery</b></summary>
-
-<br>
 # ASR Model Comparison
 
 下表对比了 6 个样本上各模型的转录结果。<span style="color:#22c55e">**绿色**</span>表示与 Ground Truth 一致的词，<span style="color:#ef4444">**红色**</span>表示错误/缺失/多余的词。每个单元格底部标注该模型在该样本上的 WER。
