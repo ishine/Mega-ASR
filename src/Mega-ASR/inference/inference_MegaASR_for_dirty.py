@@ -1,25 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Clean version: Qwen3-ASR merged model single-audio inference with language output.
-
-加载方式对应你的  ckpt/Mega-ASR/Mega-ASR_for_dirty  版本：
-- 模型路径默认：
-   ckpt/Mega-ASR/Mega-ASR_for_dirty 
-
-默认只输出必要内容：
-1. 初始化完成提示
-2. 最终识别结果，例如：
-   language English<asr_text>xxxx
-
-不会输出：
-- TVM / torch / transformers warning
-- Loading checkpoint shards 进度条
-- generation flags warning
-
-需要调试时加 --verbose。
-"""
-
 import argparse
 import contextlib
 import json
