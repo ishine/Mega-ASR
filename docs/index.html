@@ -103,7 +103,7 @@
   .logo {
     width: 124px;
     height: 124px;
-    margin: 0 auto 16px;
+    margin: 0 auto 10px;
     display: block;
     border-radius: 14px;
     object-fit: cover;
@@ -164,7 +164,7 @@
 
   .paper-tagline {
     display: block;
-    margin: 22px auto 0;
+    margin: 14px auto 0;
     max-width: 900px;
     font-size: clamp(20px, 1.75vw, 23px);
     font-weight: 500;
@@ -178,16 +178,16 @@
     padding: 0 8px;
   }
 
-  /* ---- New: abstract paragraph below the tagline ---- */
+  /* ---- Abstract paragraph (now lives after affiliations, before link buttons) ---- */
   .paper-abstract {
     display: block;
-    margin: 20px auto 0;
+    margin: 14px auto 0;
     max-width: 900px;
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: clamp(16px, 1.2vw, 18px);
     font-weight: 400;
     font-style: normal;
-    line-height: 1.62;
+    line-height: 1.6;
     color: var(--ink-soft);
     text-align: justify;
     text-justify: inter-word;
@@ -201,13 +201,13 @@
   /* ---- Title rules (above + below the full paper title) ---- */
   .title-rule {
     display: block;
-    margin: 6px auto 18px;
+    margin: 4px auto 12px;
     width: min(720px, 84%);
     background: var(--ink);
     border-radius: 1px;
   }
-  .title-rule-top    { height: 2.5px; margin-top: 4px; margin-bottom: 12px; }
-  .title-rule-bottom { height: 1px; background: var(--rule-strong); margin-top: 12px; margin-bottom: 4px; }
+  .title-rule-top    { height: 2.5px; margin-top: 2px; margin-bottom: 10px; }
+  .title-rule-bottom { height: 1px; background: var(--rule-strong); margin-top: 10px; margin-bottom: 2px; }
 
   /* squared superscript — blue-purple, blinks once per second */
   .sq {
@@ -229,7 +229,7 @@
   /* ----------------- Authors ----------------- */
   .authors {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 14px;
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 19px;
     color: var(--ink-soft);
@@ -246,7 +246,7 @@
 
   .affiliations {
     text-align: center;
-    margin-top: -15px;
+    margin-top: -10px;
     font-size: 16px;
     color: var(--ink-mute);
     font-style: italic;
@@ -263,7 +263,7 @@
 
   /* ----------------- Link buttons ----------------- */
   .link-row {
-    margin-top: 14px;
+    margin-top: 18px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -1179,7 +1179,6 @@
       </span>
       <span class="title-rule title-rule-bottom"></span>
       <span class="paper-tagline" data-i18n="paperTagline">You&rsquo;ll come back to Mega-ASR &mdash; after finding the rest fail in the real world.</span>
-      <span class="paper-abstract" data-i18n="paperAbstract">We introduce <strong>MEGA-ASR</strong>, the first foundation ASR model to target <strong>full-scenario robust speech recognition in the wild</strong> through systematic training on <strong>7 atomic acoustic conditions and 54 compound acoustic scenarios</strong>. Built on 2.6M training samples covering noise, far-field speech, obstruction, echo and reverberation, recording artifacts, electronic distortion, and transmission dropout, MEGA-ASR uses <strong>A2S-SFT and DG-WGPO based RL</strong> to achieve <strong>up to nearly 30% gains over leading open and closed source SOTA models</strong> in challenging acoustic environments.</span>
     </h1>
 
     <p class="authors">
@@ -1199,6 +1198,9 @@
       &nbsp;&nbsp;
       <span class="aff-num">3</span>Shanghai AI Lab
     </p>
+
+    <!-- ===================== ABSTRACT ===================== -->
+    <p class="paper-abstract" data-i18n="paperAbstract">We introduce <strong>MEGA-ASR</strong>, the first foundation ASR model to target <strong>full-scenario robust speech recognition in the wild</strong> through systematic training on <strong>7 atomic acoustic conditions and 54 compound acoustic scenarios</strong>. Built on 2.6M training samples covering noise, far-field speech, obstruction, echo and reverberation, recording artifacts, electronic distortion, and transmission dropout, MEGA-ASR uses <strong>A2S-SFT and DG-WGPO based RL</strong> to achieve <strong>up to nearly 30% gains over leading open and closed source SOTA models</strong> in challenging acoustic environments. <strong>Mega-ASR is fully open.</strong></p>
 
     <!-- ===================== LINK BUTTONS ===================== -->
     <div class="link-row">
@@ -1800,7 +1802,7 @@
           'recording artifacts, electronic distortion, and transmission dropout, MEGA-ASR uses ' +
           '<strong>A2S-SFT and DG-WGPO based RL</strong> to achieve ' +
           '<strong>up to nearly 30% gains over leading open and closed source SOTA models</strong> ' +
-          'in challenging acoustic environments.',
+          'in challenging acoustic environments. <strong>Mega-ASR is fully open.</strong>',
 
         demoH2: 'ASR Robustness Across Challenging Conditions',
         demoIntro:
@@ -1848,7 +1850,7 @@
           '该模型基于 260 万条训练样本，覆盖噪声、远场语音、遮挡、回声与混响、录制伪影、电子失真以及传输丢包等情形，' +
           '并采用 <strong>基于 A2S-SFT 与 DG-WGPO 的强化学习方案</strong>，' +
           '在挑战性声学环境中相比领先的开源与闭源 SOTA 模型 ' +
-          '<strong>实现最高近 30% 的性能提升</strong>。',
+          '<strong>实现最高近 30% 的性能提升</strong>。<strong>Mega-ASR 完全开源。</strong>',
 
         demoH2: '复杂声学条件下的 ASR 鲁棒性',
         demoIntro:
