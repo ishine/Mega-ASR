@@ -30,28 +30,60 @@ class LoRADeltaSwitch:
         with open(config_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
+    def _load_adapter_blocks(self, adapter_dir: str | os.PathLike[str]) -> dict[str, Any]:
+        blocks_path = os.path.join(str(adapter_dir), "mega_lora_blocks.json")
+        if not os.path.exists(blocks_path):
+            return {}
+
+        with open(blocks_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+
     @staticmethod
     def _normalize_module_name(name: str) -> str:
-        for prefix in ("base_model.model.", "model."):
+        for prefix in ("base_model.model.",):
             if name.startswith(prefix):
                 name = name[len(prefix) :]
-        
-        # 兼容旧版本导出的 LoRA 路径，将 thinker.layers 映射为 thinker.model.layers
+
         if name.startswith("thinker.layers."):
             name = name.replace("thinker.layers.", "thinker.model.layers.", 1)
-            
+
         return name
 
-    def _split_lora_key(self, key: str) -> tuple[str | None, str | None]:
+    @staticmethod
+    def _module_name_candidates(name: str) -> list[str]:
+        candidates = [name]
+
+        if name.startswith("model."):
+            candidates.append(name[len("model.") :])
+
+        if name.startswith("thinker.layers."):
+            candidates.append(name.replace("thinker.layers.", "thinker.model.layers.", 1))
+
+        if name.startswith("thinker.model."):
+            candidates.append(name.replace("thinker.model.", "thinker.", 1))
+
+        return list(dict.fromkeys(candidates))
+
+    @staticmethod
+    def _raw_module_name(key: str, marker: str) -> str:
+        name = key.split(marker)[0]
+        for prefix in ("base_model.model.", "model."):
+            if name.startswith(prefix):
+                return name[len(prefix) :]
+        return name
+
+    def _split_lora_key(self, key: str) -> tuple[str | None, str | None, str | None]:
+        raw_key = key
         key = self._normalize_module_name(key)
 
         for marker in (".lora_A.", ".lora_B."):
             if marker in key:
                 module_name = key.split(marker)[0]
+                raw_module_name = self._raw_module_name(raw_key, marker)
                 kind = "A" if marker == ".lora_A." else "B"
-                return module_name, kind
+                return module_name, raw_module_name, kind
 
-        return None, None
+        return None, None, None
 
     def add_adapter(
         self,
@@ -62,6 +94,7 @@ class LoRADeltaSwitch:
     ) -> None:
         config = self._load_adapter_config(adapter_dir)
         state = self._load_adapter_state(adapter_dir)
+        blocks = self._load_adapter_blocks(adapter_dir)
 
         lora_alpha = config.get("lora_alpha", 1)
         rank = config.get("r")
@@ -73,23 +106,42 @@ class LoRADeltaSwitch:
         grouped: dict[str, dict[str, torch.Tensor]] = {}
 
         for key, tensor in state.items():
-            module_name, kind = self._split_lora_key(key)
-            if module_name is None or kind is None:
+            module_name, raw_module_name, kind = self._split_lora_key(key)
+            if module_name is None or raw_module_name is None or kind is None:
                 continue
 
             if strip_prefixes:
                 for prefix in strip_prefixes:
                     if module_name.startswith(prefix):
                         module_name = module_name[len(prefix) :]
+                    if raw_module_name.startswith(prefix):
+                        raw_module_name = raw_module_name[len(prefix) :]
 
-            grouped.setdefault(module_name, {})[kind] = tensor.cpu()
+            matched_name = None
+            for candidate in self._module_name_candidates(module_name):
+                if candidate in module_dict:
+                    matched_name = candidate
+                    break
+
+            target_name = matched_name or module_name
+            group_key = f"{target_name}\0{raw_module_name}"
+            item = grouped.setdefault(
+                group_key,
+                {
+                    "target_module_name": target_name,
+                    "raw_module_name": raw_module_name,
+                },
+            )
+            item[kind] = tensor.cpu()
 
         loaded = 0
         missing = []
 
-        for module_name, pair in grouped.items():
+        for pair in grouped.values():
             if "A" not in pair or "B" not in pair:
                 continue
+            module_name = pair["target_module_name"]
+            raw_module_name = pair["raw_module_name"]
             if module_name not in module_dict:
                 missing.append(module_name)
                 continue
@@ -99,43 +151,63 @@ class LoRADeltaSwitch:
                 missing.append(module_name)
                 continue
 
-            a_matrix = pair["A"].float()
-            b_matrix = pair["B"].float()
-            adapter_rank = rank_pattern.get(module_name, rank)
-            if adapter_rank is None:
-                adapter_rank = a_matrix.shape[0]
-            adapter_alpha = alpha_pattern.get(module_name, lora_alpha)
-            scaling = float(adapter_alpha) / float(adapter_rank)
-
-            delta = torch.matmul(b_matrix, a_matrix) * scaling
             weight = module.weight
+            a_matrix = pair["A"].to(device=weight.device, dtype=torch.float32)
+            b_matrix = pair["B"].to(device=weight.device, dtype=torch.float32)
+            module_blocks = blocks.get(raw_module_name) or blocks.get(module_name)
 
-            if fan_in_fan_out:
-                delta = delta.T
+            if module_blocks:
+                deltas = []
+                for block in module_blocks:
+                    start = int(block["start"])
+                    end = int(block["end"])
+                    block_rank = int(block.get("rank", end - start))
+                    block_alpha = int(block.get("alpha", block_rank))
+                    delta = torch.matmul(b_matrix[:, start:end], a_matrix[start:end])
+                    delta = delta * (float(block_alpha) / float(block_rank))
+                    if fan_in_fan_out:
+                        delta = delta.T
+                    deltas.append(delta)
+            else:
+                adapter_rank = rank_pattern.get(raw_module_name, rank_pattern.get(module_name, rank))
+                if adapter_rank is None:
+                    adapter_rank = a_matrix.shape[0]
+                adapter_alpha = alpha_pattern.get(
+                    raw_module_name,
+                    alpha_pattern.get(module_name, lora_alpha),
+                )
+                scaling = float(adapter_alpha) / float(adapter_rank)
+                delta = torch.matmul(b_matrix, a_matrix) * scaling
+                if fan_in_fan_out:
+                    delta = delta.T
+                deltas = [delta]
 
-            if delta.shape != weight.shape:
-                try:
-                    delta = delta.reshape(weight.shape)
-                except Exception:
-                    missing.append(
-                        f"{module_name}: delta shape {tuple(delta.shape)} != "
-                        f"weight shape {tuple(weight.shape)}"
-                    )
-                    continue
+            for delta in deltas:
+                if delta.shape != weight.shape:
+                    try:
+                        delta = delta.reshape(weight.shape)
+                    except Exception:
+                        missing.append(
+                            f"{module_name}: delta shape {tuple(delta.shape)} != "
+                            f"weight shape {tuple(weight.shape)}"
+                        )
+                        continue
 
-            delta = delta.to(dtype=weight.dtype)
-            if self.keep_delta_on_gpu:
-                delta = delta.to(device=weight.device)
+                delta = delta.to(dtype=weight.dtype)
+                if self.keep_delta_on_gpu:
+                    delta = delta.to(device=weight.device)
+                else:
+                    delta = delta.cpu()
 
-            self.items.append(
-                {
-                    "name": name,
-                    "module_name": module_name,
-                    "weight": weight,
-                    "delta": delta,
-                }
-            )
-            loaded += 1
+                self.items.append(
+                    {
+                        "name": name,
+                        "module_name": module_name,
+                        "weight": weight,
+                        "delta": delta,
+                    }
+                )
+                loaded += 1
 
         if missing:
             warnings.warn(

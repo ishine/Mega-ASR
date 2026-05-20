@@ -80,6 +80,11 @@ class Qwen3ASR:
         return_objects: bool = False,
         **transcribe_kwargs: Any,
     ) -> str | list[str] | Any:
+        if isinstance(audio, os.PathLike):
+            audio = str(audio)
+        elif isinstance(audio, (list, tuple)):
+            audio = [str(item) if isinstance(item, os.PathLike) else item for item in audio]
+
         results = self.model.transcribe(
             audio=audio,
             language=language,

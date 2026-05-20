@@ -87,7 +87,7 @@ class MegaASR:
         self.lora_switch.add_adapter(
             parent_module=self.asr.model.model,
             adapter_dir=self.lora_dir,
-            name="mega_asr_lora",
+            name="mega_asr_merged_adapter",
         )
 
     def _set_lora(self, active: bool) -> None:
