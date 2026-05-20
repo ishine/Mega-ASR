@@ -359,7 +359,7 @@ On top of Mega-ASR-Base, DG-WGPO further optimizes the model with WER-gated poli
 Run Qwen3-ASR inference and compute WER (English) / CER (Chinese) on JSONL data:
 
 ```bash
-CUDA_VISIBLE_DEVICES=6,7 python evaluate_wer.py \
+python evaluate_wer.py \
   --input_jsonl example/examples.jsonl \
   --output_jsonl output_with_wer.jsonl
 ```
