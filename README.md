@@ -227,7 +227,7 @@ We introduce **MEGA-ASR**, the first foundation ASR model to target **full-scena
 
 ## Quick Start
 
-Mega-ASR is trained on a large volume of inherently high-WER data, which leads to a slight degradation in its basic recognition capability. To address this, **we equip the system with a router** that determines whether Mega-ASR should be activated for the current audio input, via dediding whether to mount the LoRA weights.
+Mega-ASR is trained on a large volume of inherently high-WER data, which leads to a slight degradation in its basic recognition capability. To address this, **we equip the system with a router** that determines whether Mega-ASR should be activated for the current audio input, via deciding whether to mount the LoRA weights.
 
 
 **Installation**
