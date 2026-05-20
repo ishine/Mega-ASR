@@ -48,3 +48,6 @@ Thumbs.db
 .vscode/
 .idea/
 ckpt/
+
+# Local ablation experiments
+scripts/infer_no_stage2_llm.py

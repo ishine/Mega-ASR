@@ -1,6 +1,6 @@
 ## ASR Evaluation
 
-We provide a simple evaluation script for running ASR inference and computing WER/CER.  
+We provide a simple evaluation script for running Mega-ASR inference and computing WER/CER.  
 The input file should be a JSONL file. Each line only needs two required fields:
 
 ```json
@@ -18,25 +18,31 @@ num_edits   # edit distance between prediction and ground truth
 ref_len     # number of reference words or characters
 ```
 
-We use Qwen3-ASR as the default inference model:
+The script reuses the Mega-ASR inference wrapper, so it loads the base Qwen3-ASR model,
+the merged Mega-ASR LoRA, and the router from the checkpoint directory:
 
-```python
-model = Qwen3ASRModel.from_pretrained(
-    args.model_path,
-    dtype=torch.bfloat16 if use_cuda else torch.float32,
-    device_map="cuda:0" if use_cuda else "cpu",
-    max_inference_batch_size=BATCH_SIZE,
-    max_new_tokens=MAX_NEW_TOKENS,
-)
+```text
+ckpt/Mega-ASR/
+├── Qwen3-ASR-1.7B
+├── mega-asr-merged
+└── audio_quality_router/best_acc_model.pt
 ```
-
-If you want to evaluate another ASR model, replace this part with your own model-loading and inference logic, while keeping the input and output JSONL format unchanged.
 
 ### Run Evaluation
 
 ```bash
-python eval/evaluate_asr.py \
-  --model_path ckpt/Mega-ASR \
+python src/MegaASR/eval/evaluate_wer.py \
+  --ckpt_dir ckpt/Mega-ASR \
   --input_jsonl examples/test.jsonl \
   --output_jsonl outputs/pred_with_wer.jsonl
+```
+
+Disable routing if you want to always use the Mega-ASR LoRA:
+
+```bash
+python src/MegaASR/eval/evaluate_wer.py \
+  --ckpt_dir ckpt/Mega-ASR \
+  --input_jsonl examples/test.jsonl \
+  --output_jsonl outputs/pred_with_wer.jsonl \
+  --no-routing
 ```

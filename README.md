@@ -326,7 +326,7 @@ The DG-WGPO reinforcement learning module will be released in a future update.
 ## Evaluation
 
 
-We provide a simple evaluation script for running ASR inference and computing WER/CER.  We use Qwen3-ASR as the default inference model. The input file should be a JSONL file. Each line only needs two required fields:
+We provide a simple evaluation script for running Mega-ASR inference and computing WER/CER. The input file should be a JSONL file. Each line only needs two required fields:
 
 ```json
 {"audio": "examples/audio/noise.wav", "answer": "I usually take the quieter road home because the main street gets crowded after work."}
@@ -342,11 +342,11 @@ wer         # WER/CER score value; CER is also stored in this field for compatib
 num_edits   # edit distance between prediction and ground truth
 ref_len     # number of reference words or characters
 ```
-We can use the following command to start it.
+The script reuses the same Mega-ASR wrapper as `infer.py`, loading the base model, merged LoRA, and router from `ckpt/Mega-ASR`.
 
 ```bash
-python eval/evaluate_asr.py \
-  --model_path Qwen3-ASR-1.7B \
+python src/MegaASR/eval/evaluate_wer.py \
+  --ckpt_dir ckpt/Mega-ASR \
   --input_jsonl examples/test.jsonl \
   --output_jsonl outputs/pred_with_wer.jsonl
 ```
@@ -360,15 +360,17 @@ python eval/evaluate_asr.py \
 On top of Mega-ASR-Base, DG-WGPO further optimizes the model with WER-gated policy learning: low-WER samples emphasize token-level acoustic refinement, while high-WER samples emphasize sentence-level semantic reconstruction to reduce hallucinations, omissions, and off-audio outputs. The final reward combines a static WER-based accuracy signal with an anti-repetition gate and a dynamic dual-granularity reward, using fixed hyperparameters τ=0.3, αs=0.4, and αdyn=0.6.
 
 
-Run Qwen3-ASR inference and compute WER (English) / CER (Chinese) on JSONL data:
+Run Mega-ASR inference without routing if you want to force the merged LoRA on every sample:
 
 ```bash
-python evaluate_wer.py \
-  --input_jsonl example/examples.jsonl \
-  --output_jsonl output_with_wer.jsonl
+python src/MegaASR/eval/evaluate_wer.py \
+  --ckpt_dir ckpt/Mega-ASR \
+  --input_jsonl examples/test.jsonl \
+  --output_jsonl outputs/pred_with_wer.jsonl \
+  --no-routing
 ```
 
-Each input line requires `audio_path` and `answer` (ground-truth transcription). Place `evaluate_wer.py` and `cn_tn.py` (used for Chinese text normalization) in the same directory.
+Each input line requires `audio` or `audio_path`, plus `answer` as the ground-truth transcription.
 
 **Mega-ASR** is evaluated across three benchmark families — classical academic test sets, robustness benchmarks, and our own in-the-wild compound benchmark.
 
