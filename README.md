@@ -397,11 +397,14 @@ This project will be released under the **Apache-2.0 License**. You can do every
 **Citation**: You can cite Mega-ASR using the following BibTeX entry. Thank you for your kindness 🙂
 
 ```bibtex
-@article{xie2024mini,
-  title={Mini-omni: Language models can hear, talk while thinking in streaming},
-  author={Xie, Zhifei and Wu, Changqiao},
-  journal={arXiv preprint arXiv:2408.16725},
-  year={2024}
+@misc{xie2026megaasrinthewild2speechrecognition,
+      title={Mega-ASR: Towards In-the-wild^2 Speech Recognition via Scaling up Real-world Acoustic Simulation},
+      author={Zhifei Xie and Kaiyu Pang and Haobin Zhang and Deheng Ye and Xiaobin Hu and Shuicheng Yan and Chunyan Miao},
+      year={2026},
+      eprint={2605.19833},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2605.19833},
 }
 ```
 <a href="https://www.star-history.com/?repos=gpt-omni%2Fmini-omi%2Cxzf-thu%2FMega-ASR&type=date&legend=bottom-right">
