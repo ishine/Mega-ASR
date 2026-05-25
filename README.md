@@ -262,6 +262,50 @@ bash scripts/inference.sh
 bash scripts/inference.sh --audio /path/to/audio.wav
 ```
 
+**vLLM Backend**
+
+For faster Qwen3-ASR inference, install the vLLM extras first:
+
+```bash
+pip install -U "qwen-asr[vllm]"
+```
+
+vLLM does not provide native Windows GPU support. On Windows, run the vLLM
+backend inside Linux, WSL2, or a Linux Docker container; otherwise use the
+default Transformers backend.
+
+Then run the vLLM entrypoint:
+
+```bash
+python infer_vllm.py --audio /path/to/audio.wav
+```
+
+This entrypoint always runs Mega-ASR LoRA with a single vLLM engine. It loads
+the base Qwen3-ASR checkpoint, applies the Mega-ASR LoRA delta once,
+saves/reuses a materialized checkpoint cache under
+`ckpt/Mega-ASR/mega-asr-vllm-materialized`, and then starts vLLM from that
+checkpoint. It does not use per-sample routing.
+
+On 8GB GPUs, the CLI automatically uses conservative vLLM defaults unless you override them:
+`gpu_memory_utilization=0.85`, `max_model_len=8192`, `max_num_seqs=1`, and
+`max_num_batched_tokens=2048`.
+
+```bash
+python infer_vllm.py \
+  --gpu_memory_utilization 0.85 \
+  --max_model_len 8192 \
+  --max_num_seqs 1 \
+  --max_num_batched_tokens 2048 \
+  --audio /path/to/audio.wav
+```
+
+Mega-ASR's default Transformers backend dynamically mounts and unmounts LoRA
+deltas inside one PyTorch model. vLLM manages model weights inside its own
+engine, so this vLLM entrypoint materializes LoRA into a normal checkpoint
+before engine startup instead of doing router-based dynamic switching.
+Qwen3-ASR streaming inference is available only through the official vLLM
+backend and does not support batch inference or timestamps.
+
 
 ## Introduction
 
@@ -348,13 +392,25 @@ wer         # WER/CER score value; CER is also stored in this field for compatib
 num_edits   # edit distance between prediction and ground truth
 ref_len     # number of reference words or characters
 ```
-The script reuses the same Mega-ASR wrapper as `infer.py`, loading the base model, LoRA, and router from `ckpt/Mega-ASR`.
+The Transformers evaluation script reuses the same Mega-ASR wrapper as `infer.py`, loading the base model, LoRA, and router from `ckpt/Mega-ASR`.
 
 ```bash
 python src/MegaASR/eval/evaluate_wer.py \
   --ckpt_dir ckpt/Mega-ASR \
   --input_jsonl examples/test.jsonl \
   --output_jsonl outputs/pred_with_wer.jsonl
+```
+
+Use the separate vLLM evaluation entrypoint after installing `qwen-asr[vllm]`.
+It follows `infer_vllm.py`: the Mega-ASR LoRA is materialized once under
+`ckpt/Mega-ASR/mega-asr-vllm-materialized`, then vLLM loads that checkpoint
+without router-based dynamic switching.
+
+```bash
+python src/MegaASR/eval/evaluate_wer_vllm.py \
+  --ckpt_dir ckpt/Mega-ASR \
+  --input_jsonl examples/test.jsonl \
+  --output_jsonl outputs/pred_with_wer.vllm.jsonl
 ```
 
 <p align="center">

@@ -14,5 +14,5 @@ datasets
 wandb
 whisper_normalizer
 editdistance
-sacrebleu
+sacrebleu==1.5.1
 zhconv

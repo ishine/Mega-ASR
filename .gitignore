@@ -51,3 +51,5 @@ ckpt/
 
 # Local ablation experiments
 scripts/infer_no_stage2_llm.py
+
+tests/

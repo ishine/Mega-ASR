@@ -44,6 +44,7 @@ def main():
 
     audio = resolve_path(args.audio)
     ckpt_dir = resolve_path(args.ckpt_dir)
+
     model = MegaASR(
         model_path=ckpt_dir / "Qwen3-ASR-1.7B",
         lora_dir=ckpt_dir / "mega-asr-merged",
@@ -52,6 +53,7 @@ def main():
         quality_threshold=args.threshold,
         device_map=args.device_map,
         keep_delta_on_gpu=args.keep_delta_on_gpu,
+        backend="transformers",
     )
     result = model.infer(audio, return_route=True)
     print(result)
